@@ -47,7 +47,7 @@ export default class App extends React.Component {
         "start_time": "15:00:00",
         "end_time": "16:00:00",
         "start_hour": 0,
-        "day_number": 6
+        "day_number": 5
       }
     ]};
   }

@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import EventComponent from './EventComponent';
 
 export default class CalendarComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.props.calendarDataObj;
-    console.log(this.props.calendarDataObj)
   }
 
   render() {
@@ -38,8 +38,8 @@ export default class CalendarComponent extends React.Component {
                 <td className="active">Mi 08.07.</td>
                 <td>Do 09.07.</td>
                 <td>Fr 10.07.</td>
-                <td className="free" >Sa 11.07.</td>
-                <td className="free" >So 12.07.</td>
+                <td className="free">Sa 11.07.</td>
+                <td className="free">So 12.07.</td>
               </tr>
             </thead>
             <tbody>
@@ -181,20 +181,10 @@ export default class CalendarComponent extends React.Component {
   }
 }
 
-
 const DayRow = (props) => {
   return(
     <div className="day" data-day={`${props.days}`}>
+      {props.events.data.map((data) => <EventComponent key={data.id} data={data} day={props.days} />)}
     </div>
-  )
-}
-
-const EventRow = (props) => {
-  return(
-    <a href=""><div className="event q4 past" draggable="true" style={{top: 0}}>
-      <p className="hours">08:00 - 09:00</p>
-      <p className="description">Meier</p>
-      <span className="icon"></span>
-    </div></a>
   )
 }

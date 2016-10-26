@@ -105,7 +105,8 @@ body {
       position: absolute;
       width: 107px;
       border: 1px solid white;
-      font-size: 0.75em; }
+      font-size: 0.75em;
+      margin-left: 1px; }
       #terminplaner .table .event.q1 {
         height: 33px; }
       #terminplaner .table .event.q2 {

@@ -1,50 +1,46 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 
-export default class EventComponent extends React.Component {
+class EventComponent extends Component {
   constructor(props) {
     super(props);
-    console.log(props)
+    this.state = this.props;
   }
 
+  onDragOver(ev) {
+    console.log("dragOver: dropEffect = " + ev.dataTransfer.dropEffect + " ; effectAllowed = " + ev.dataTransfer.effectAllowed);
+    ev.preventDefault();
+    ev.dataTransfer.dropEffect = "move"
+  };
+
+  onDragStart(ev) {
+    console.log("dragStart: dropEffect = " + ev.dataTransfer.dropEffect + " ; effectAllowed = " + ev.dataTransfer.effectAllowed);
+    ev.dataTransfer.setData("text/html", ev.target.id);
+    ev.dataTransfer.effectAllowed = "move";
+    console.log(ev.dataTransfer);
+  };
+  
+  onDrop(ev) {
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("text/html");
+  };
+
+
   render() {
-    return(<div>
-      <div className="day" data-day="1">
-        
-      </div>
-
-      <div className="day" data-day="2">
-      </div>
-
-      <div className="day" data-day="3">
-      </div>
-
-      <div className="day" data-day="4">
-      </div>
-
-      <div className="day" data-day="5">
-      </div>
-
-      <div className="day"  data-day="6">
-      </div>
-      
-      <div className="day" data-day="7">
-      </div>
-    </div>)
-    var days = [];
-
-    for(var i = 0; i < 7; i++) {
-      var day = i;
-      days.push(<div className="day" data-day={day} />);
-      if(this.props.calendarDataObj[0].day_number == day) {
-        days.push(
-          <a href=""><div className="event q4 past" draggable="true" style={{top: 0}}>
-            <p className="hours">08:00 - 09:00</p>
-            <p className="description"></p>
+    let top = (this.props.data.start_time.slice(0, 2) - 8) * 132;
+    if(this.props.day === this.props.data.day_number) {
+      return(
+        <a href="">
+          <div className="event q4 past" draggable="true" style={{top}} onDragStart={this.onDragStart} onDragOver={this.onDragOver}>
+            <p className="hours">{this.props.data.start_time} - {this.props.data.end_time}</p>
+            <p className="description">{this.props.data.patient.salutation} {this.props.data.patient.firstname} {this.props.data.patient.lastname}</p>
             <span className="icon"></span>
-          </div></a>
-        );
-      }
-      days.push(<div />);
+          </div>
+        </a>
+      );
+    } else {
+      return(null);
     }
   }
 }
+
+export default EventComponent;
