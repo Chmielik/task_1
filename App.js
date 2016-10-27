@@ -52,8 +52,16 @@ export default class App extends React.Component {
     ]};
   }
 
+  componentDidMount() {
+    setTimeout(() => {
+      let newData = this.state.data;
+      newData[0].day_number = 2;
+
+      this.setState({ data: newData });
+    }, 1000);
+  }
+
   render() {
-    
     return (
       <div>
         <CalendarComponent 

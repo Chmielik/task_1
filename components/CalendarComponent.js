@@ -1,17 +1,74 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import EventComponent from './EventComponent';
+import EventRow from './EventRow';
 
 export default class CalendarComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.props.calendarDataObj;
+    this.props.dragSrcEl;
+  }
+
+  // onDragOver(ev) {
+  //   console.log("dragOver: dropEffect = " + ev.dataTransfer.dropEffect + " ; effectAllowed = " + ev.dataTransfer.effectAllowed);
+  //   ev.preventDefault();
+  //   ev.dataTransfer.dropEffect = "move"
+  // };
+
+  // onDragStart(ev) {
+  //   console.log("dragStart: dropEffect = " + ev.dataTransfer.dropEffect + " ; effectAllowed = " + ev.dataTransfer.effectAllowed);
+  //   ev.dataTransfer.setData("text/html", ev.target.id);
+  //   ev.dataTransfer.effectAllowed = "move";
+  //   console.log(ev.dataTransfer);
+  // };
+  
+  // onDrop(ev) {
+  //   ev.preventDefault();
+  //   var data = ev.dataTransfer.getData("text/html");
+  // };
+
+  onDrag (ev) {
+    console.log("onDrag");
+  }
+  onDragEnd (ev) {
+    console.log("onDragEnd");
+  }
+  onDragEnter (ev) {
+    console.log("onDragEnter");
+  }
+  onDragExit (ev) {
+    console.log("onDragExit");
+  }
+  onDragLeave (ev) {
+    console.log("onDragLeave");
+  }
+  onDragOver (ev) {
+    ev.preventDefault();
+    ev.dataTransfer.dropEffect = 'move';
+    console.log("onDragOver");
+  }
+  onDragStart (ev) {
+    console.log("onDragStart");
+  }
+  onDrop (ev) {
+    console.log("onDrop");
   }
 
   render() {
     const days = [1, 2, 3, 4, 5, 6, 7];
+    const handlers = {
+      'onDrag': this.onDrag,
+      'onDragEnd': this.onDragEnd,
+      'onDragEnter': this.onDragEnter,
+      'onDragExit': this.onDragExit,
+      'onDragLeave': this.onDragLeave,
+      'onDragOver': this.onDragOver,
+      'onDragStart': this.onDragStart,
+      'onDrop': this.onDrop
+    };
     let eventsObject = days.map(data => {
-      return <DayRow key={data} days={data} events={this.state} />
+      return <DayRow key={data} days={data} events={this.state} handlers={handlers} />
     });
     return (
       <div id="terminplaner">
@@ -182,9 +239,12 @@ export default class CalendarComponent extends React.Component {
 }
 
 const DayRow = (props) => {
+  const hours = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
   return(
     <div className="day" data-day={`${props.days}`}>
-      {props.events.data.map((data) => <EventComponent key={data.id} data={data} day={props.days} />)}
+      {hours.map((hour) => <EventRow hour={hour} key={hour} handlers={props.handlers} /> )}
+      {props.events.data.map((data) => <EventComponent key={data.id} data={data} day={props.days} handlers={props.handlers} />)}
     </div>
   )
 }
+
