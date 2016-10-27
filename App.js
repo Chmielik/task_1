@@ -4,6 +4,9 @@ import CalendarComponent from './components/CalendarComponent';
 export default class App extends React.Component {
   constructor(props) {
     super(props);
+    this.onDrop = this.onDrop.bind(this);
+    this.changeEvent = this.changeEvent.bind(this);
+    this.onDragStart = this.onDragStart.bind(this);
     this.state = {data: [
       {
         "id": 1,
@@ -53,23 +56,81 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-    setTimeout(() => {
-      let newData = this.state.data;
-      newData[0].day_number = 2;
+    // setTimeout(() => {
+    //   let newData = this.state.data;
+    //   newData[0].day_number = 2;
+    //   this.setState({ data: newData });
+    // }, 1000);
+  }
 
-      this.setState({ data: newData });
-    }, 1000);
+  onDrag (ev) {
+    console.log("onDrag");
+  }
+
+  onDragEnd (ev) {
+    console.log("onDragEnd");
+  }
+
+  onDragEnter (ev) {
+  }
+
+  onDragExit (ev) {
+    console.log("onDragExit");
+  }
+
+  onDragLeave (ev) {
+  }
+
+  onDragOver (ev) {
+    ev.preventDefault();
+  }
+
+  onDragStart (id) {
+    this.state.eventId = id;
+  }
+
+  onDrop (hour, day) {
+    let newData = this.state.data;
+    newData[this.state.eventId - 1].day_number = day;
+    let toHour = hour + 1;
+    if(hour < 10) {
+      hour = "0" + hour;
+    }
+    if(toHour < 10) {
+      toHour = "0" + toHour;
+    }
+    toHour = toHour + ":00:00";
+    hour = hour + ":00:00";
+    newData[this.state.eventId -1].start_time = hour;
+    newData[this.state.eventId -1].end_time = toHour;
+    this.setState({ data: newData });
+  }
+
+  changeEvent() {
+
   }
 
   render() {
-    return (
-      <div>
-        <CalendarComponent 
-          calendarDataObj = {this.state}
-          //onEventEdit = {this.onEventEditCallback}  
-          //onEventClick = {this.onEventClickCallback}
-        />
-      </div>
+    const handlers = {
+      'onDrag': this.onDrag,
+      'onDragEnd': this.onDragEnd,
+      'onDragEnter': this.onDragEnter,
+      'onDragExit': this.onDragExit,
+      'onDragLeave': this.onDragLeave,
+      'onDragOver': this.onDragOver,
+      'onDragStart': this.onDragStart,
+      'onDrop': this.onDrop
+    };
+
+  return (
+    <div>
+      <CalendarComponent
+        calendarDataObj = {this.state}
+        handlers = {handlers}
+        //onEventEdit = {this.onEventEditCallback}
+        //onEventClick = {this.onEventClickCallback}
+      />
+    </div>
     );
   }
 }
